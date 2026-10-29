@@ -56,6 +56,14 @@ Output: Top K Recommendations
 (song details, score, and explanation)
 ```
 
+Scoring awards 3 points for a genre match and 2 points for a mood match.
+Each numeric preference (energy, valence, danceability, and tempo) earns up to
+2 points based on closeness to the user's target:
+`2 * max(0, 1 - abs(song_value - target) / scale)`. The scale is 1 for
+normalized 0-to-1 features and 120 BPM for tempo, so matching a user's target
+scores higher than simply having a high or low feature value. An acoustic
+preference adds up to 1 point in proportion to the song's acousticness.
+
 Potential biases to consider:
 - **Catalog bias:** The small dataset covers some genres and moods better than others, so those songs have more chances to rank highly.
 - **Preference bias:** Strong genre or mood weights can repeatedly favor a narrow set of songs and reduce variety.
@@ -102,12 +110,45 @@ You can add more tests in `tests/test_recommender.py`.
 Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
 
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+================================================
+TOP RECOMMENDATIONS
+================================================
+
+1. Sunrise City
+   Final score: 6.96
+   Reasons:
+   - Genre match (+3 points)
+   - Mood match (+2 points)
+   - Energy similarity: 1.96/2 points (target 0.8, song 0.82)
+
+2. Gym Hero
+   Final score: 4.74
+   Reasons:
+   - Genre match (+3 points)
+   - Mood mismatch (+0 points)
+   - Energy similarity: 1.74/2 points (target 0.8, song 0.93)
+
+3. Rooftop Lights
+   Final score: 3.92
+   Reasons:
+   - Genre mismatch (+0 points)
+   - Mood match (+2 points)
+   - Energy similarity: 1.92/2 points (target 0.8, song 0.76)
+
+4. Velvet Weekend
+   Final score: 1.98
+   Reasons:
+   - Genre mismatch (+0 points)
+   - Mood mismatch (+0 points)
+   - Energy similarity: 1.98/2 points (target 0.8, song 0.79)
+
+5. Night Drive Loop
+   Final score: 1.90
+   Reasons:
+   - Genre mismatch (+0 points)
+   - Mood mismatch (+0 points)
+   - Energy similarity: 1.90/2 points (target 0.8, song 0.75)
+
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
@@ -148,4 +189,3 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
-

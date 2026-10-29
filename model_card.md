@@ -3,7 +3,7 @@
 ## 1. Model Name  
 
 Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+Example: **MusicFinder 1.0**  
 
 ---
 
@@ -31,6 +31,16 @@ Prompts:
 - What changes did you make from the starter logic  
 
 Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+
+> The recommender compares each song with the user's preferences and adds up points
+to produce a score. A song earns 3 points for matching the preferred genre and
+2 for matching the preferred mood. For energy, valence, danceability, and tempo,
+it awards up to 2 points per feature, with closer values to the user's target
+earning more points. The normalized features use a 0-to-1 scale, while tempo
+uses a 120 BPM scale. If an acoustic preference is provided, acoustic songs earn
+up to 1 point when the user likes acoustic music, and less when they do not.
+Songs are sorted from highest to lowest total score, and the top requested
+number are returned with an explanation of the points earned for each feature.
 
 ---
 

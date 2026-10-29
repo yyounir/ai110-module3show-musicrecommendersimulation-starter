@@ -1,4 +1,13 @@
-from src.recommender import Song, UserProfile, Recommender
+import pytest
+
+from src.recommender import (
+    Song,
+    UserProfile,
+    Recommender,
+    recommend_songs,
+    score_song,
+)
+from src.main import print_recommendations
 
 def make_small_recommender() -> Recommender:
     songs = [
@@ -59,3 +68,50 @@ def test_explain_recommendation_returns_non_empty_string():
     explanation = rec.explain_recommendation(user, song)
     assert isinstance(explanation, str)
     assert explanation.strip() != ""
+
+
+def test_score_song_returns_weighted_score_and_explanations():
+    score, reasons = score_song(
+        {"genre": "pop", "mood": "happy", "energy": 0.8},
+        {"genre": "pop", "mood": "happy", "energy": 0.6},
+    )
+
+    assert score == pytest.approx(6.6)
+    assert isinstance(reasons, list)
+    assert any("Genre match (+3 points)" in reason for reason in reasons)
+    assert any("Mood match (+2 points)" in reason for reason in reasons)
+    assert any("Energy similarity: 1.60/2 points" in reason for reason in reasons)
+
+
+def test_recommend_songs_returns_top_k_sorted_by_score():
+    songs = [
+        {"title": "Lower", "genre": "lofi", "mood": "chill", "energy": 0.4},
+        {"title": "Higher", "genre": "pop", "mood": "happy", "energy": 0.8},
+        {"title": "Middle", "genre": "pop", "mood": "chill", "energy": 0.6},
+    ]
+
+    results = recommend_songs(
+        {"genre": "pop", "mood": "happy", "energy": 0.8},
+        songs,
+        k=2,
+    )
+
+    assert [song["title"] for song, _, _ in results] == ["Higher", "Middle"]
+    assert results[0][1] > results[1][1]
+    assert all(explanation for _, _, explanation in results)
+
+
+def test_print_recommendations_formats_score_and_each_reason(capsys):
+    print_recommendations([
+        (
+            {"title": "Test Track"},
+            6.6,
+            "Genre match (+3 points); Energy similarity: 1.60/2 points",
+        )
+    ])
+
+    output = capsys.readouterr().out
+    assert "1. Test Track" in output
+    assert "Final score: 6.60" in output
+    assert "   - Genre match (+3 points)" in output
+    assert "   - Energy similarity: 1.60/2 points" in output
