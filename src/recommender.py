@@ -1,6 +1,16 @@
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 
+DEFAULT_USER_PROFILE: Dict[str, object] = {
+    "favorite_genre": "pop",
+    "favorite_mood": "happy",
+    "target_energy": 0.8,
+    "likes_acoustic": False,
+    "target_tempo_bpm": 120,
+    "target_valence": 0.8,
+    "target_danceability": 0.75,
+}
+
 @dataclass
 class Song:
     """

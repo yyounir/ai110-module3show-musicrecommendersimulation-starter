@@ -37,7 +37,24 @@ You can include a simple diagram or bullet list if helpful.
 > 
 > ```UserProfile``` stores ```favorite_genre```, ```favorite_mood```, ```target_energy```, and ```likes_acoustic```.
 
----
+### Plan:
+```text
+Input: User Preferences
+(favorite genre, favorite mood, target energy, acoustic preference, etc.)
+                         |
+                         v
+Process: Evaluate every song from songs.csv
+For each song:
+  - Compare its attributes with the user's preferences
+  - Calculate a match score and collect reasons
+                         |
+                         v
+Rank: Sort songs by score, highest first
+                         |
+                         v
+Output: Top K Recommendations
+(song details, score, and explanation)
+```
 
 ## Getting Started
 
@@ -125,6 +142,5 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
-
 
 
