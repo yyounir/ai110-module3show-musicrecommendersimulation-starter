@@ -56,6 +56,12 @@ Output: Top K Recommendations
 (song details, score, and explanation)
 ```
 
+Potential biases to consider:
+- **Catalog bias:** The small dataset covers some genres and moods better than others, so those songs have more chances to rank highly.
+- **Preference bias:** Strong genre or mood weights can repeatedly favor a narrow set of songs and reduce variety.
+- **Feature/proxy bias:** Broad labels such as genre and mood may not capture an individual's taste or the many ways people interpret those labels.
+- **Popularity or representation bias:** If the catalog or its features reflect existing popularity or cultural representation gaps, recommendations may reinforce them.
+
 ## Getting Started
 
 ### Setup
@@ -142,5 +148,4 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
-
 
