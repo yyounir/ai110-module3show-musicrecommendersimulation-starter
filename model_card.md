@@ -17,6 +17,8 @@ Prompts:
 - What assumptions does it make about the user  
 - Is this for real users or classroom exploration  
 
+> This model generates recommendations based on the user's preference on genre, mood, energy, danceability, and whether the user likes acoustic or not. It makes assumptions based on what the user likes and aligns that data that is given by the dataset csv file. This is designed for classroom exploration and not a production app for real users, because its a command line server with fixed sample profiles and edge cases.
+
 ---
 
 ## 3. How the Model Works  
@@ -53,7 +55,11 @@ Prompts:
 - How many songs are in the catalog  
 - What genres or moods are represented  
 - Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+- Are there parts of musical taste missing in the dataset
+
+> The app uses a small, static CSV dataset of 17 example songs (data/songs.csv). Each row has an ID, title, artist, genre, mood, and audio-style features: energy, tempo (BPM), valence, danceability, and acousticness. Data was added to narrow the user's interests.
+> 
+> The dataset captures a few broad preferences—genre, mood, energy, tempo, valence, danceability, and acousticness—but musical taste is much richer. It doesn’t represent things like favorite artists, subgenres, instruments or vocals, lyrics and language, song era, familiarity, or listening context.
 
 ---
 
@@ -67,6 +73,8 @@ Prompts:
 - Any patterns you think your scoring captures correctly  
 - Cases where the recommendations matched your intuition  
 
+> It works best for clear, feature-based tastes that match the fields in the dataset. For example, someone who likes upbeat, energetic pop gets sensible matches like “Sunrise City” or “Gym Hero”; a chill, acoustic-leaning listener is well represented by the lofi tracks; and an intense rock fan can match with “Storm Runner.”
+
 ---
 
 ## 6. Limitations and Bias 
@@ -79,6 +87,8 @@ Prompts:
 - Genres or moods that are underrepresented  
 - Cases where the system overfits to one preference  
 - Ways the scoring might unintentionally favor some users  
+
+> The energy gap doesn’t inherently favor high-energy users. The scoring is symmetric: energy contributes 4 × max(0, 1 − |target − song|). A low-energy target can score just as well as a high-energy one when a song is close to it.
 
 ---
 
@@ -95,6 +105,11 @@ Prompts:
 
 No need for numeric metrics unless you created some.
 
+> I tested out High Energy pop, Chill Lofi, and Deep Intense Rock, as well as some edge case profiles. It has given me the correct song recommendations and the score helped me fully understand how the mood fits well with the songs that were selected. What surprised me was how well it gave the score based on the interests of the user which is excellent for recommending songs.
+> 
+> I have tested main.py multiple times and learned that there were several cases where I was recommended Sunrise City from the Chill Lofi profile because based on the data for this profile, the user loves lofi, and a chill mood which matches the recommendation well. 
+
+
 ---
 
 ## 8. Future Work  
@@ -108,6 +123,12 @@ Prompts:
 - Improving diversity among the top results  
 - Handling more complex user tastes  
 
+> - Add richer features and preferences where it includes favorite artists, subgenres, instruments, vocals, language, release era, and listening context
+> - Make explanations clearer: Explain the strongest matches in plain language
+> - Increase diversity in the results: Avoid filling the top five with very similar songs
+> - Handle more complex tactics: Let users provide several favorite songs or describe different listening modes,
+> - Learn from feedback where you use likes, skips, saves, and listening history to update recommendations over time, while allowing users to adjust or reset what the model has learned.
+
 ---
 
 ## 9. Personal Reflection  
@@ -119,3 +140,5 @@ Prompts:
 - What you learned about recommender systems  
 - Something unexpected or interesting you discovered  
 - How this changed the way you think about music recommendation apps  
+
+> Something that I have learned from this experience is that I was able to pinpoint the favorite songs that I need recommendation by what my interests were. For example, there were several cases where I was recommended Sunrise City from the Chill Lofi profile because based on the data for this profile, the user loves lofi, and a chill mood which matches the recommendation well. 

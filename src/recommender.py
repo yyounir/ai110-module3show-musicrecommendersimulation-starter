@@ -102,7 +102,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     reasons: List[str] = []
 
     for preference_keys, song_key, label, points in (
-        (("favorite_genre", "genre"), "genre", "Genre", 3.0),
+        (("favorite_genre", "genre"), "genre", "Genre", 1.5),
         (("favorite_mood", "mood"), "mood", "Mood", 2.0),
     ):
         preference = next(
@@ -121,13 +121,15 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         else:
             reasons.append(f"{label} mismatch (+0 points)")
 
-    numeric_features = (
-        (("target_energy", "energy"), "energy", "Energy", 1.0),
-        (("target_valence", "valence"), "valence", "Valence", 1.0),
-        (("target_danceability", "danceability"), "danceability", "Danceability", 1.0),
-        (("target_tempo_bpm", "tempo_bpm"), "tempo_bpm", "Tempo", 120.0),
+    numeric_features: Tuple[
+        Tuple[Tuple[str, str], str, str, float, float], ...
+    ] = (
+        (("target_energy", "energy"), "energy", "Energy", 1.0, 4.0),
+        (("target_valence", "valence"), "valence", "Valence", 1.0, 2.0),
+        (("target_danceability", "danceability"), "danceability", "Danceability", 1.0, 2.0),
+        (("target_tempo_bpm", "tempo_bpm"), "tempo_bpm", "Tempo", 120.0, 2.0),
     )
-    for preference_keys, song_key, label, distance_scale in numeric_features:
+    for preference_keys, song_key, label, distance_scale, max_points in numeric_features:
         target = next(
             (user_prefs[key] for key in preference_keys
              if user_prefs.get(key) is not None),
@@ -146,12 +148,12 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         if distance_scale != 1.0 and (target_value < 0 or song_value < 0):
             raise ValueError(f"{label} target and song value must be non-negative")
 
-        feature_points = 2.0 * max(
+        feature_points = max_points * max(
             0.0, 1.0 - abs(target_value - song_value) / distance_scale
         )
         score += feature_points
         reasons.append(
-            f"{label} similarity: {feature_points:.2f}/2 points "
+            f"{label} similarity: {feature_points:.2f}/{max_points:g} points "
             f"(target {target_value:g}, song {song_value:g})"
         )
 

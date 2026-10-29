@@ -76,11 +76,11 @@ def test_score_song_returns_weighted_score_and_explanations():
         {"genre": "pop", "mood": "happy", "energy": 0.6},
     )
 
-    assert score == pytest.approx(6.6)
+    assert score == pytest.approx(6.7)
     assert isinstance(reasons, list)
-    assert any("Genre match (+3 points)" in reason for reason in reasons)
+    assert any("Genre match (+1.5 points)" in reason for reason in reasons)
     assert any("Mood match (+2 points)" in reason for reason in reasons)
-    assert any("Energy similarity: 1.60/2 points" in reason for reason in reasons)
+    assert any("Energy similarity: 3.20/4 points" in reason for reason in reasons)
 
 
 def test_recommend_songs_returns_top_k_sorted_by_score():
