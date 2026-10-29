@@ -29,6 +29,14 @@ Some prompts to answer:
 
 You can include a simple diagram or bullet list if helpful.
 
+> For the given dataset, the most effective features for a simple, content-based recommendator would be: Genre, Mood, Energy, Valence, Dancability, and Tempo. When starting with those features, normalizing the numeri values and giving genre and mood clear weight.
+> 
+> To calculate the score for a numerical feature like energy is to use the user's preferred value rather than reward high or low values. A scoring rule and ranking rule is required because it tells us how well each song matches the user's preferences.
+> 
+> ```Song``` stores the ```id```, ```title```, ```artist```, ```genre```, ```mood```, ```energy```, ```tempo_bpm```, ```valence```, ```dancability```, and ```acousticness```.
+> 
+> ```UserProfile``` stores ```favorite_genre```, ```favorite_mood```, ```target_energy```, and ```likes_acoustic```.
+
 ---
 
 ## Getting Started
